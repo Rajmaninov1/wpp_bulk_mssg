@@ -9,7 +9,8 @@ from selenium.webdriver.common.by import By
 from time import sleep
 from urllib.parse import quote
 
-search_list = pHones(sheet_number=1)
+print("Seleccione la hoja de calculo de Google que se usará para extraer números: ")
+search_list = pHones(sheet_number=input())
 
 for number in search_list:
     text = str(number[0])
