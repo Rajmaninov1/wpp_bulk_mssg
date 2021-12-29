@@ -10,7 +10,7 @@ from time import sleep
 from urllib.parse import quote
 
 print("Seleccione la hoja de calculo de Google que se usará para extraer números: ")
-search_list = pHones(sheet_number=input())
+search_list = pHones(sheet_number=int(input()))
 
 for number in search_list:
     text = str(number[0])
