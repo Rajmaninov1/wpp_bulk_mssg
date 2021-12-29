@@ -37,7 +37,8 @@ def pHones(sheet_number):
 
     info = np.array(records_df)
 
-    phones = info[:, 2:4]
-    phones = list(phones)
+    phones = []
+    for row in info:
+        phones.append([row[2],row[3]])
 
     return phones

@@ -1,32 +1,13 @@
-def wpp_messaging(phones_list):
-
-    f = open("message.txt", "r")
-    message = f.read()
-    f.close()
-    #message = """Buenas tardes... soy """ + nombre + message
-
-    #print("##########################################################")
-    #print('Este es su mensaje\n\n')
-    #print(message)
-    #print("##########################################################")
-    #message = quote(message)
+def wpp_messaging(phones_list,driver,message):
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.webdriver.common.by import By
+    from time import sleep
 
     numbers = phones_list
-    #f = open("numbers.txt", "r")
-    #for line in f.read().splitlines():
-    #    if line != "":
-    #        numbers.append(line)
-    #f.close()
     total_number = len(numbers)
-    #print("##########################################################")
-    #print('\nEncontramos ' + str(total_number) + ' numeros en el archivo')
-    #print("##########################################################")
-    #print()
     delay = 30
 
-    driver = webdriver.Chrome(ChromeDriverManager().install())
-    print('Una vez su navegador inicie ingresará a whatsapp web')
-    driver.get('https://web.whatsapp.com')
     no_wpp_numbers = []
     wpp_numbers = []
 
@@ -36,7 +17,9 @@ def wpp_messaging(phones_list):
             continue
         print('{}/{} => enviando mensaje a: {}.'.format((idx+1), total_number, number))
         try:
-            url = 'https://web.whatsapp.com/send?phone=' + number + '&text=' + message
+            number = number.replace(' ','')
+            url = 'https://web.whatsapp.com/send?phone=+57' + number + '&text=' + message
+            print(url)
             sent = False
             for i in range(3):
                 if not sent:
@@ -70,5 +53,3 @@ def wpp_messaging(phones_list):
         len(wpp_numbers), "\n", wpp_numbers)
     print("\nLos numeros sin whatsapp fueron: ",
         len(no_wpp_numbers), "\n", no_wpp_numbers)
-
-    driver.close()
