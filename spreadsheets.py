@@ -6,10 +6,8 @@ Created on Sat Dec 18 13:16:49 2021
 """
 
 
-def pHones(sheet_number):
+def connect_to_api(sheet_number):
     import gspread
-    import numpy as np
-    import pandas as pd
     from oauth2client.service_account import ServiceAccountCredentials
 
     print('************ QUE HAY DE NUEVO *******************')
@@ -28,7 +26,15 @@ def pHones(sheet_number):
     sheet = client.open('MarkeBot')
 
     # get the first sheet of the Spreadsheet
-    sheet_instance = sheet.get_worksheet(sheet_number)
+    return sheet.get_worksheet(sheet_number)
+    
+
+def pHones(sheet_number):
+    import numpy as np
+    import pandas as pd
+
+    # gets the sheet instance
+    sheet_instance = connect_to_api(sheet_number)
 
     # get all the records of the data
     records_data = sheet_instance.get_all_records()
@@ -39,6 +45,16 @@ def pHones(sheet_number):
 
     phones = []
     for row in info:
-        phones.append([row[2],row[3]])
+        phones.append([row[2],row[3],row[4]])
 
     return phones
+
+
+def message_sended(sheet_number,message_sended_list):
+    import numpy as np
+    import pandas as pd
+
+    # gets the sheet instance
+    sheet_instance = connect_to_api(sheet_number)
+
+    sheet_instance.update('G2:G',message_sended_list)
