@@ -1,4 +1,4 @@
 Keys.json
 script.bat
 chrome-data/
-_pycache__/
+__pycache__/
