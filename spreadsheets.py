@@ -58,3 +58,5 @@ def message_sended(sheet_number,message_sended_list):
     sheet_instance = connect_to_api(sheet_number)
 
     sheet_instance.update('G2:G',message_sended_list)
+
+    return True

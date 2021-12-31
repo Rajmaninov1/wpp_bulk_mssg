@@ -5,12 +5,18 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from time import sleep
+from unicodedata import normalize
 from urllib.parse import quote
 
 # Opens the message to send
 f = open("message.txt", "r")
 message = f.read()
 f.close()
+message = re.sub(
+        r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1", 
+        normalize( "NFD", message), 0, re.I
+    )
+message = quote(message)
 
 # Selects the spreadsheet to read
 print("Seleccione la hoja de calculo de Google que se usará para extraer números: ")
@@ -27,7 +33,7 @@ options.add_experimental_option('useAutomationExtension', False)
 driver = webdriver.Chrome(ChromeDriverManager().install(),options=options)
 print('Una vez su navegador inicie ingresará a whatsapp web')
 driver.get('https://web.whatsapp.com')
-sleep(20)
+sleep(30)
 
 # list of comprobation to 
 wpp_comprobation = []
