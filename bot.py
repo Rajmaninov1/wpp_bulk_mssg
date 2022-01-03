@@ -33,7 +33,7 @@ options.add_experimental_option('useAutomationExtension', False)
 driver = webdriver.Chrome(ChromeDriverManager().install(),options=options)
 print('Una vez su navegador inicie ingresará a whatsapp web')
 driver.get('https://web.whatsapp.com')
-sleep(30)
+sleep(20)
 
 # list of comprobation to 
 wpp_comprobation = []
@@ -41,24 +41,24 @@ wpp_comprobation = []
 for number in search_list:
     text = str(number[0]).replace(' ','')
     aproved = number[1]
-    message_sended = number[2]
+    mssg_sended = number[2]
     numbers_list = re.findall(".*?(\(?3\d{2}\D{0,3}\d{3}\D{0,3}\d{4}).*?",text)
     sent = False
     print(numbers_list)
 
     for i,match in enumerate(numbers_list):
         try:
-            if aproved == 1 and message_sended != 1:
+            if aproved == 1 and int(mssg_sended) != 1:
                 sent = wpp_messaging([match],driver,message)
             else:
                 print("no aprobado")
         except:
             print("Ha ocurrido un error")
     
-    if sent is True:
-        wpp_comprobation.append(1)
+    if sent == True or mssg_sended == 1:
+        wpp_comprobation.append([1])
     else:
-        wpp_comprobation.append(0)
+        wpp_comprobation.append([0])
 
-message_sended(sheet_number,wpp_comprobation)
+message_sended(sheet_number,wpp_comprobation,'E2:E')
 driver.close()

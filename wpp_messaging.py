@@ -7,7 +7,7 @@ def wpp_messaging(phones_list,driver,message):
 
     numbers = phones_list
     total_number = len(numbers)
-    delay = 10
+    delay = 20
 
     for idx, number in enumerate(numbers):
         number = number.strip()
@@ -23,7 +23,7 @@ def wpp_messaging(phones_list,driver,message):
                     try:
                         click_btn = WebDriverWait(driver, delay).until(
                             EC.element_to_be_clickable((By.CLASS_NAME, '_4sWnG')))
-                        sleep(3)
+                        sleep(1)
                     except Exception as e:
                         if driver.find_element('._2Nr6U').get_attribute('innerHTML') == "El número de teléfono compartido a través de la dirección URL es inválido":
                             continue
@@ -34,6 +34,7 @@ def wpp_messaging(phones_list,driver,message):
                         print("Si hay una alerta de whatsapp, Por favor descartelo.")
                         pass
                     else:
+                        sleep(3)
                         click_btn.click()
                         sent = True
                         sleep(1)

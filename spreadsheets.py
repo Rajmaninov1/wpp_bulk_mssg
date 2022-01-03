@@ -10,7 +10,6 @@ def connect_to_api(sheet_number):
     import gspread
     from oauth2client.service_account import ServiceAccountCredentials
 
-    print('************ QUE HAY DE NUEVO *******************')
     # define the scope
     scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
              "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
@@ -50,13 +49,13 @@ def pHones(sheet_number):
     return phones
 
 
-def message_sended(sheet_number,message_sended_list):
+def message_sended(sheet_number,message_sended_list,sheet_range):
     import numpy as np
     import pandas as pd
 
     # gets the sheet instance
     sheet_instance = connect_to_api(sheet_number)
 
-    sheet_instance.update('G2:G',message_sended_list)
+    sheet_instance.update(sheet_range,message_sended_list)
 
     return True
