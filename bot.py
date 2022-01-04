@@ -1,11 +1,10 @@
 import re
-from spreadsheets import pHones,message_sended
+from spreadsheets import get_information,get_sheets_names, sheet_update
 from wpp_messaging import wpp_messaging
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from time import sleep
-from unicodedata import normalize
 from urllib.parse import quote
 from datetime import datetime
 
@@ -14,16 +13,11 @@ from datetime import datetime
 f = open("message.txt", "r")
 message = f.read()
 f.close()
-message = re.sub(
-        r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1", 
-        normalize( "NFD", message), 0, re.I
-    )
 message = quote(message)
 
 # Selects the spreadsheet to read
-print("Seleccione la hoja de calculo de Google que se usará para extraer números: ")
-sheet_number = int(input())
-search_list = pHones(sheet_number=sheet_number)
+sheet_number = get_sheets_names('MarkeBot')
+search_list = get_information(sheet_number=sheet_number)
 
 # Uses the options to use default user configuration in the browser
 options = Options()
@@ -39,12 +33,14 @@ sleep(15)
 
 # list of comprobation to 
 wpp_comprobation = []
+date_mssg = []
 today = str(datetime.today().strftime('%Y-%m-%d'))
 
 for number in search_list:
     text = str(number[0]).replace(' ','')
     aproved = number[1]
     mssg_sended = number[2]
+    date_sended = number[3]
     numbers_list = re.findall(".*?(\(?3\d{2}\D{0,3}\d{3}\D{0,3}\d{4}).*?",text)
     sent = False
     print(numbers_list)
@@ -62,16 +58,17 @@ for number in search_list:
         wpp_comprobation.append([1])
     else:
         wpp_comprobation.append([0])
+    if str(date_sended) == '':
+        date_mssg.append([today])
+    else:
+        date_mssg.append([date_sended])
 
-today = str(datetime.today().strftime('%Y-%m-%d'))
-date_mssg = [[today] for i in range(len(wpp_comprobation))]
-#print("\n\n_____________________________\n",date_mssg,"\n______________________________\n\n")
-message_sended(sheet_number,wpp_comprobation,'E2:E')
-#sleep(1)
-message_sended(sheet_number,date_mssg,'F2:F')
+
+sheet_update(sheet_number,wpp_comprobation,'E2:E')
+sheet_update(sheet_number,date_mssg,'F2:F')
 
 driver.close()
 
-print("""la ejecucuón del programa se ha completado sin errores.
-        Puede comprobar la información registrada tras este proceso
-        en la hoja de calculo asociada.""")
+print("""la ejecución del programa se ha completado sin errores. 
+Puede comprobar la información registrada tras este proceso 
+en la hoja de calculo asociada.""")
