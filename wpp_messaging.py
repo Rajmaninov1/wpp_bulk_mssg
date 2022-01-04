@@ -37,7 +37,7 @@ def wpp_messaging(phones_list,driver,message):
                         sleep(3)
                         click_btn.click()
                         sent = True
-                        sleep(1)
+                        sleep(2)
                         print('Mensaje enviado a: ' + number)
         except Exception as e:
             print('Fallo enviando mensaje a ' + number + str(e))

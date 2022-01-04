@@ -7,6 +7,8 @@ from selenium.webdriver.chrome.options import Options
 from time import sleep
 from unicodedata import normalize
 from urllib.parse import quote
+from datetime import datetime
+
 
 # Opens the message to send
 f = open("message.txt", "r")
@@ -33,10 +35,11 @@ options.add_experimental_option('useAutomationExtension', False)
 driver = webdriver.Chrome(ChromeDriverManager().install(),options=options)
 print('Una vez su navegador inicie ingresará a whatsapp web')
 driver.get('https://web.whatsapp.com')
-sleep(20)
+sleep(15)
 
 # list of comprobation to 
 wpp_comprobation = []
+today = str(datetime.today().strftime('%Y-%m-%d'))
 
 for number in search_list:
     text = str(number[0]).replace(' ','')
@@ -48,7 +51,7 @@ for number in search_list:
 
     for i,match in enumerate(numbers_list):
         try:
-            if aproved == 1 and int(mssg_sended) != 1:
+            if aproved == 1 and str(mssg_sended) != '1':
                 sent = wpp_messaging([match],driver,message)
             else:
                 print("no aprobado")
@@ -60,5 +63,15 @@ for number in search_list:
     else:
         wpp_comprobation.append([0])
 
+today = str(datetime.today().strftime('%Y-%m-%d'))
+date_mssg = [[today] for i in range(len(wpp_comprobation))]
+#print("\n\n_____________________________\n",date_mssg,"\n______________________________\n\n")
 message_sended(sheet_number,wpp_comprobation,'E2:E')
+#sleep(1)
+message_sended(sheet_number,date_mssg,'F2:F')
+
 driver.close()
+
+print("""la ejecucuón del programa se ha completado sin errores.
+        Puede comprobar la información registrada tras este proceso
+        en la hoja de calculo asociada.""")
