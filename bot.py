@@ -56,11 +56,12 @@ for number in search_list:
     
     if sent == True or mssg_sended == 1:
         wpp_comprobation.append([1])
+        if str(date_sended) == '':
+            date_mssg.append([today])
+        else:
+            date_mssg.append([date_sended])
     else:
         wpp_comprobation.append([0])
-    if str(date_sended) == '':
-        date_mssg.append([today])
-    else:
         date_mssg.append([date_sended])
 
 
