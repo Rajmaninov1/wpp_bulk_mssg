@@ -6,7 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from time import sleep
 from urllib.parse import quote
-from datetime import datetime
+from datetime import date, datetime
 
 
 # Opens the message to send
@@ -54,12 +54,13 @@ for number in search_list:
         except:
             print("Ha ocurrido un error")
     
+    date_sended = date_sended.replace("'","")
     if sent == True or mssg_sended == 1:
         wpp_comprobation.append([1])
-        if str(date_sended) == '':
-            date_mssg.append([today])
-        else:
+        if re.match('\d{2,4}[-/]\d{2}[-/]\d{2,4}',str(date_sended)):
             date_mssg.append([date_sended])
+        else:
+            date_mssg.append([today])
     else:
         wpp_comprobation.append([0])
         date_mssg.append([date_sended])
