@@ -15,14 +15,21 @@ def wpp_messaging(phones_list,driver,message,file_path=None):
             pass
         print('{}/{} => enviando mensaje a: {}'.format((idx+1), total_number, number))
         try:
-            url = 'https://web.whatsapp.com/send?phone=+57' + number + '&text=' + message
+            if message == '':
+                url = 'https://web.whatsapp.com/send?phone=57' + number + '&text'
+            else:
+                url = 'https://web.whatsapp.com/send?phone=57' + number + '&text=' + message
             sent = False
             for i in range(3):
                 if not sent:
                     driver.get(url)
                     try:
-                        click_btn = WebDriverWait(driver, delay).until(
-                            EC.element_to_be_clickable((By.CLASS_NAME, '_4sWnG')))
+                        if message == '':
+                            click_btn = WebDriverWait(driver, delay).until(
+                                EC.element_to_be_clickable((By.XPATH, '//div[@title = "Adjuntar"]')))
+                        else:
+                            click_btn = WebDriverWait(driver, delay).until(
+                                EC.element_to_be_clickable((By.CLASS_NAME, '_4sWnG')))
                         sleep(1)
                     except Exception as e:
                         if driver.find_element('._2Nr6U').get_attribute('innerHTML') == "El número de teléfono compartido a través de la dirección URL es inválido":
@@ -35,6 +42,7 @@ def wpp_messaging(phones_list,driver,message,file_path=None):
                         pass
                     else:
                         if file_path != None:
+                            print(file_path)
                             attachment_box = driver.find_element_by_xpath('//div[@title = "Adjuntar"]')
                             attachment_box.click()
                             image_box = driver.find_element_by_xpath(
