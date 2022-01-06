@@ -1,4 +1,4 @@
-def wpp_messaging(phones_list,driver,message):
+def wpp_messaging(phones_list,driver,message,file_path=None):
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
     from selenium.webdriver.common.by import By
@@ -7,7 +7,7 @@ def wpp_messaging(phones_list,driver,message):
 
     numbers = phones_list
     total_number = len(numbers)
-    delay = 20
+    delay = 10
 
     for idx, number in enumerate(numbers):
         number = number.strip()
@@ -34,7 +34,16 @@ def wpp_messaging(phones_list,driver,message):
                         print("Si hay una alerta de whatsapp, Por favor descartelo.")
                         pass
                     else:
-                        sleep(3)
+                        if file_path != None:
+                            attachment_box = driver.find_element_by_xpath('//div[@title = "Adjuntar"]')
+                            attachment_box.click()
+                            image_box = driver.find_element_by_xpath(
+                                '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]')
+                            image_box.send_keys(file_path)
+                            click_btn = WebDriverWait(driver, delay).until(
+                                EC.element_to_be_clickable((By.CLASS_NAME, '_1w1m1')))
+                        else:
+                            sleep(4)
                         click_btn.click()
                         sent = True
                         sleep(2)
