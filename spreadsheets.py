@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
 """
 Created on Sat Dec 18 13:16:49 2021
 
 @author: seran
 """
+import numpy as np
+import pandas as pd
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 
 def connect_to_api(sheet_number):
     """
     
     """
-    import gspread
-    from oauth2client.service_account import ServiceAccountCredentials
-
     # define the scope
     scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
              "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
@@ -35,9 +35,6 @@ def get_information(sheet_number):
     """
     
     """
-    import numpy as np
-    import pandas as pd
-
     # gets the sheet instance
     sheet_instance = connect_to_api(sheet_number)
 
@@ -50,7 +47,7 @@ def get_information(sheet_number):
 
     phones = []
     for row in info:
-        phones.append([row[2],row[3],row[4],row[5]])
+        phones.append([row[2],row[3],row[4],row[5],row[7]])
 
     return phones
 
@@ -71,9 +68,6 @@ def get_sheets_names(document_number):
     """
     
     """
-    from oauth2client.service_account import ServiceAccountCredentials
-    import gspread
-
     scope = ["https://spreadsheets.google.com/feeds",
              'https://www.googleapis.com/auth/spreadsheets',
              "https://www.googleapis.com/auth/drive.file",

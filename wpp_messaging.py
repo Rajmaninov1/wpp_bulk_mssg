@@ -1,12 +1,16 @@
+from time import sleep
+
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 def wpp_messaging(phones_list,driver,message,file_path=None):
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    from selenium.webdriver.common.by import By
-    from time import sleep
-
-
+    """
+    
+    """
     numbers = phones_list
     total_number = len(numbers)
+    wpp_existence = 0
     delay = 10
 
     for idx, number in enumerate(numbers):
@@ -32,8 +36,9 @@ def wpp_messaging(phones_list,driver,message,file_path=None):
                                 EC.element_to_be_clickable((By.CLASS_NAME, '_4sWnG')))
                         sleep(1)
                     except Exception as e:
-                        if driver.find_element('._2Nr6U').get_attribute('innerHTML') == "El número de teléfono compartido a través de la dirección URL es inválido":
-                            continue
+                        if driver.find_element_by_class_name('_2Nr6U').get_attribute('innerHTML') == "El número de teléfono compartido a través de la dirección URL es inválido":
+                            wpp_existence = 1
+                            break
                         print(
                             f"Algo salio mal...\n Falló el enviode mensaje a: {number}, reintentando ({i+1}/3)")
                         print(
@@ -60,4 +65,4 @@ def wpp_messaging(phones_list,driver,message,file_path=None):
             print('Fallo enviando mensaje a ' + number + str(e))
             pass
 
-    return sent
+    return [sent,wpp_existence]

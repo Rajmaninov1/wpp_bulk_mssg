@@ -18,7 +18,7 @@ user = getenv('username')
 CSIDL_MYPICTURES = 39
 buf= ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
 ctypes.windll.shell32.SHGetFolderPathW(0, CSIDL_MYPICTURES, 0, 0, buf)
-pictures_path = buf.value+'/'
+pictures_path = buf.value + '\\'
 
 # Opens the message to send
 f = open("message.txt", "r")
@@ -34,7 +34,7 @@ search_list = get_information(sheet_number=sheet_number)
 want_image = True if input("¿Desea añadir una imagen? s/n: \n").lower() == 's' else False
 file_path = None
 if want_image:
-    file_path = pictures_path + input("Ingrese el nombre de la imagen que desea agregar (debe estar en la carpeta de imagenes):\n")
+    file_path = pictures_path + open("image.txt", "r").read().replace('\n','')
 
 # Uses the options to use default user configuration in the browser
 options = Options()
@@ -51,21 +51,23 @@ sleep(15)
 # list of comprobation to 
 wpp_comprobation = []
 date_mssg = []
+wpp_exists = []
 today = str(datetime.today().strftime('%Y-%m-%d'))
 
 try:
-    for number in search_list:
-        text = str(number[0]).replace(' ','')
-        aproved = number[1]
-        mssg_sended = number[2]
-        date_sended = number[3]
+    for row in search_list:
+        text = str(row[0]).replace(' ','')
+        aproved = row[1]
+        mssg_sended = row[2]
+        date_sended = row[3]
+        wpp_existence = row[4]
         numbers_list = re.findall(".*?(\(?3\d{2}\D{0,3}\d{3}\D{0,3}\d{4}).*?",text)
-        sent = False
+        sent = [False,wpp_existence]
         print(numbers_list)
 
         for i,match in enumerate(numbers_list):
             try:
-                if aproved == 1 and str(mssg_sended) != '1':
+                if aproved == 1 and str(mssg_sended) != '1' and wpp_existence != 1:
                     sent = wpp_messaging([match],driver,message,file_path)
                 else:
                     print("no aprobado")
@@ -73,7 +75,7 @@ try:
                 print("Ha ocurrido un error")
         
         date_sended = date_sended.replace("'","")
-        if sent == True or mssg_sended == 1:
+        if sent[0] == True or mssg_sended == 1:
             wpp_comprobation.append([1])
             if re.match('\d{2,4}[-/\ ]\d{2}[-/\ ]\d{2,4}',str(date_sended)):
                 date_mssg.append([date_sended])
@@ -82,9 +84,11 @@ try:
         else:
             wpp_comprobation.append([0])
             date_mssg.append([date_sended])
+        wpp_exists.append([sent[1]])
 
     sheet_update(sheet_number,wpp_comprobation,'E2:E')
     sheet_update(sheet_number,date_mssg,'F2:F')
+    sheet_update(sheet_number,wpp_exists,'H2:H')
 
     print("la ejecución del programa se ha completado sin errores. Puede comprobar la información registrada tras este proceso en la hoja de calculo asociada.")
 except Exception as e:
