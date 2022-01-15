@@ -6,6 +6,7 @@ from datetime import datetime
 import ctypes.wintypes
 
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 
@@ -38,12 +39,13 @@ if want_image:
 
 # Uses the options to use default user configuration in the browser
 options = Options()
-options.add_argument("user-data-dir=C:/Users/" + user + "/AppData/Local/Google/Chrome/User Data")
+options.add_argument("user-data-dir=C:/Users/"+ user +"/AppData/Local/Google/Chrome/User Data")
+#options.add_argument("profile-directory=chrome_profile")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
 
 # Opens the webdriver and goes to whatsapp web
-driver = webdriver.Chrome(ChromeDriverManager().install(),options=options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
 print('Una vez su navegador inicie ingresará a whatsapp web')
 driver.get('https://web.whatsapp.com')
 sleep(15)

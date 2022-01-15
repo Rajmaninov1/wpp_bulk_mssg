@@ -6,7 +6,16 @@ from selenium.webdriver.common.by import By
 
 def wpp_messaging(phones_list,driver,message,file_path=None):
     """
-    
+    Envía mensajes via whatsapp web a una lista de números que se le pasa.
+    Datos de entrada:
+    - Lista de numeros
+    - Driver o configuración del navegador abierto con selenium
+    - El mensaje a enviar
+    - La ruta de una imagen si se desea agregar que debe tener como raiz de la dirección la carpeta de imagenes
+
+    La salida de la función devuelve una lista de dos elementos que consiste en un valor verdadero o falso 
+    según si se envió o no correctamente el mensaje y un valor de 0 o 1 dependiendo de si el número ingresado
+    tiene o no tiene whatsapp.
     """
     numbers = phones_list
     total_number = len(numbers)
