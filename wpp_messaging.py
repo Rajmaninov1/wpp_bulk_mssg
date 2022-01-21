@@ -56,7 +56,7 @@ def wpp_messaging(phones_list,driver,message,file_path=None):
                         pass
                     else:
                         if file_path != None:
-                            print(file_path)
+                            #print(file_path)
                             attachment_box = driver.find_element_by_xpath('//div[@title = "Adjuntar"]')
                             attachment_box.click()
                             image_box = driver.find_element_by_xpath(

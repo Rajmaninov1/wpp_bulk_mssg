@@ -40,7 +40,7 @@ if want_image:
 # Uses the options to use default user configuration in the browser
 options = Options()
 options.add_argument("user-data-dir=C:/Users/"+ user +"/AppData/Local/Google/Chrome/User Data")
-#options.add_argument("profile-directory=chrome_profile")
+#options.add_argument("profile-directory=")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
 
@@ -59,12 +59,20 @@ today = str(datetime.today().strftime('%Y-%m-%d'))
 try:
     for row in search_list:
         text = str(row[0]).replace(' ','')
+        # Representa si el numero ha sido aprobado manualmente para ser contactado
         aproved = row[1]
+        # Representa si el numero ha sido enviado
         mssg_sended = row[2]
+        # Representa la fecha en que el mensaje ha sido enviado
         date_sended = row[3]
+        # Representa si el numero al que se enviará el mensaje tiene o no whatsapp
         wpp_existence = row[4]
+        # Representa la lista de numeros encontrados para enviar mensajes
         numbers_list = re.findall(".*?(\(?3\d{2}\D{0,3}\d{3}\D{0,3}\d{4}).*?",text)
-        sent = [False,wpp_existence]
+        # Representa si el mensaje ha sido enviado o no
+        enviado = False
+        # Representa el estado por defecto de un envio de mensaje
+        sent = [enviado,wpp_existence]
         print(numbers_list)
 
         for i,match in enumerate(numbers_list):
@@ -79,6 +87,7 @@ try:
         date_sended = date_sended.replace("'","")
         if sent[0] == True or mssg_sended == 1:
             wpp_comprobation.append([1])
+            # Revisa el formato de la fecha
             if re.match('\d{2,4}[-/\ ]\d{2}[-/\ ]\d{2,4}',str(date_sended)):
                 date_mssg.append([date_sended])
             else:
